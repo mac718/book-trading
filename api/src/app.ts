@@ -1,30 +1,15 @@
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import db from "../models";
-import { users } from "../seeders/users";
-import { v4 as uuidv4 } from "uuid";
+import router from "./routes/books";
 
 const app = express();
 
 const port = 3001;
 
-// const createUser = () => {
-//   users.map((user) => {
-//     db.User.create(user);
-//   });
-// };
+app.use(express.static("./public"));
+app.use(express.json());
 
-// createUser();
-
-app.post("/books", (req: Request, res: Response, next: NextFunction) => {
-  const book = {
-    id: uuidv4(),
-    title: "Book",
-    author: "Some Guy",
-    UserId: "5bc947f6-ffde-49a7-8bca-b8fb29759ac2",
-  };
-  db.User.Book.create();
-  res.send();
-});
+app.use("/api/v1/books", router);
 
 db.sequelize.sync().then(() => {
   app.listen(port, () => {
