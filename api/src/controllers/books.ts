@@ -33,6 +33,7 @@ export const getBooks: RequestHandler = async (req, res) => {
       author: book.author,
       user: book.User.name,
       location: book.User.location,
+      userId: book.UserId,
     };
   });
 
