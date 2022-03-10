@@ -20,7 +20,7 @@ export const getBooks: RequestHandler = async (req, res) => {
     include: [
       {
         association: "User",
-        attibutes: ["name"],
+        attributes: ["name"],
         required: true,
       },
     ],
