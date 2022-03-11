@@ -7,8 +7,6 @@ import users from "./routes/users";
 
 const app = express();
 
-const port = 3001;
-
 app.use(morgan("dev"));
 app.use(cors());
 
@@ -18,8 +16,14 @@ app.use(express.json());
 app.use("/api/v1/books", books);
 app.use("/api/v1/users", users);
 
-db.sequelize.sync().then(() => {
-  app.listen(port, () => {
-    console.log(`now listening on port ${port}`);
-  });
-});
+console.log(process.env.NODE_ENV);
+
+// const port = 3001;
+
+// db.sequelize.sync().then(() => {
+//   app.listen(port, () => {
+//     console.log(`now listening on port ${port}`);
+//   });
+// });
+
+export default app;

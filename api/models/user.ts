@@ -6,6 +6,7 @@ interface UserAttributes {
   id: string;
   name: string;
   location: string;
+  password: string;
 }
 module.exports = (sequelize: any, DataTypes: any) => {
   class User extends Model<UserAttributes> implements UserAttributes {
@@ -17,6 +18,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     id!: string;
     name!: string;
     location!: string;
+    password!: string;
     static associate(models: any) {
       // define association here
       User.hasMany(models.Book);
@@ -35,6 +37,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
       },
       location: DataTypes.STRING,
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
     {
       sequelize,

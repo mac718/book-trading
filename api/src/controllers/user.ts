@@ -1,6 +1,8 @@
 import { RequestHandler } from "express";
 import sequelize from "sequelize";
 import db from "../../models";
+import bcrypt from "bcrypt";
+import { v4 as uuidv4 } from "uuid";
 
 type User = {
   dataValues: {
@@ -24,8 +26,19 @@ type Book = {
   UserId: string;
 };
 
+export const createUser: RequestHandler = async (req, res) => {
+  console.log(req.body);
+  const { name, location, password } = req.body;
+  const id = uuidv4();
+  const hash = await bcrypt.hash(password, 10);
+  const user = { id, location, name, password: hash };
+  await db.User.create(user);
+  res.json(user);
+};
+
 export const getUsers: RequestHandler = async (req, res) => {
   const users = await db.User.findAll();
+  //Promsise.all for parallel processing of db calls
   const usersWithBookCount: DataVlues[] = await Promise.all(
     users.map(async (user: User) => {
       let count = await db.Book.count({
@@ -38,19 +51,6 @@ export const getUsers: RequestHandler = async (req, res) => {
       return user.dataValues;
     })
   );
-
-  // users.forEach((user: User) => {
-  //   db.Book.count({
-  //     where: {
-  //       UserId: user.dataValues.id,
-  //     },
-  //   }).then((res: number) => {
-  //     user.dataValues = { ...user.dataValues, bookCount: res };
-  //     usersWithBookCount.push(user.dataValues);
-  //   });
-  // });
-
-  console.log(usersWithBookCount);
 
   res.json(usersWithBookCount);
 };
