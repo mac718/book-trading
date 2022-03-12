@@ -37,17 +37,30 @@ const RegistrationForm = () => {
     }).catch((err) => {
       console.log(err);
     });
+    setName("");
+    setLocation("");
+    setPassword("");
   };
 
   return (
     <form className={styles.form} onSubmit={registerHandler}>
       <h2>Sign Up!</h2>
       <label htmlFor="name">Name</label>
-      <input type="text" id="name" onChange={setNameHandler} />
+      <input type="text" id="name" onChange={setNameHandler} value={name} />
       <label htmlFor="location">Location</label>
-      <input type="text" id="location" onChange={setLocationHandler} />
+      <input
+        type="text"
+        id="location"
+        onChange={setLocationHandler}
+        value={location}
+      />
       <label htmlFor="password">Password</label>
-      <input type="password" id="password" onChange={setPasswordHandler} />
+      <input
+        type="password"
+        id="password"
+        onChange={setPasswordHandler}
+        value={password}
+      />
       <Button>Submit</Button>
     </form>
   );
