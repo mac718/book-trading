@@ -13,14 +13,15 @@ beforeAll(() => {
   return db.sequelize.sync();
 });
 
-// beforeEach(async () => {
-//   await db.User.destroy({ truncate: true });
-// });
+beforeEach(async () => {
+  await db.User.destroy({ where: {} });
+});
 
 const validUser = {
   id: uuidv4(),
   name: "user1",
   location: "Portland",
+  email: "user1@mail.com",
   password: "P4assword",
 };
 
@@ -29,8 +30,21 @@ const postUser = (user = validUser) => {
 };
 
 describe("User Registration", () => {
-  it("does stuff", async () => {
+  it("returns 200 status code when user successfully registers", async () => {
     const response = await postUser();
+    console.log("res", response);
     expect(response.status).toBe(200);
   });
+
+  // it("saves user to the database", async () => {
+  //   await postUser();
+  //   const users = await db.User.findAll();
+  //   expect(users.length).toBe(1);
+  // });
+
+  // it("returns an error if the user already exists", async () => {
+  //   await postUser();
+  //   const response = await postUser();
+  //   expect(response.status).toBe(400);
+  // });
 });

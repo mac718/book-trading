@@ -56,6 +56,7 @@ const RegistrationForm = () => {
       />
       <label htmlFor="password">Password</label>
       <input
+        className={styles["control-flow"]}
         type="password"
         id="password"
         onChange={setPasswordHandler}

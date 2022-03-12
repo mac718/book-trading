@@ -1,5 +1,4 @@
 import { RequestHandler } from "express";
-import sequelize from "sequelize";
 import db from "../../models";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
@@ -28,12 +27,21 @@ type Book = {
 
 export const createUser: RequestHandler = async (req, res) => {
   console.log(req.body);
-  const { name, location, password } = req.body;
+  const { name, location, email, password } = req.body;
+
+  // try {
+  //   const user = await db.User.findAll({ where: { email: email } });
+  //   // if (user) {
+  //   //   return res.status(400).send("nope");
+  //   // }
+  // } catch {
+  //   // console.log(user);
+
   const id = uuidv4();
   const hash = await bcrypt.hash(password, 10);
-  const user = { id, location, name, password: hash };
-  await db.User.create(user);
-  res.json(user);
+  const newUser = { id, location, name, email, password: hash };
+  await db.User.create(newUser);
+  res.json(newUser);
 };
 
 export const getUsers: RequestHandler = async (req, res) => {
