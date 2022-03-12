@@ -29,6 +29,14 @@ export const createUser: RequestHandler = async (req, res) => {
   console.log(req.body);
   const { name, location, email, password } = req.body;
 
+  const user = await db.User.findAll({ where: { email: email } });
+
+  console.log("user", user);
+
+  if (user.length > 0) {
+    return res.status(400).send("nope");
+  }
+
   // try {
   //   const user = await db.User.findAll({ where: { email: email } });
   //   // if (user) {

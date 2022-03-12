@@ -36,15 +36,15 @@ describe("User Registration", () => {
     expect(response.status).toBe(200);
   });
 
-  // it("saves user to the database", async () => {
-  //   await postUser();
-  //   const users = await db.User.findAll();
-  //   expect(users.length).toBe(1);
-  // });
+  it("saves user to the database", async () => {
+    await postUser();
+    const users = await db.User.findAll();
+    expect(users.length).toBe(1);
+  });
 
-  // it("returns an error if the user already exists", async () => {
-  //   await postUser();
-  //   const response = await postUser();
-  //   expect(response.status).toBe(400);
-  // });
+  it("returns an error if the user already exists", async () => {
+    await postUser();
+    const response = await postUser();
+    expect(response.status).toBe(400);
+  });
 });
