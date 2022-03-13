@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, FormEvent } from "react";
 import styles from "./RegistrationForm.module.css";
 import Button from "./UI/Button";
 
@@ -6,9 +6,6 @@ const RegistrationForm = () => {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [password, setPassword] = useState("");
-  // let nameRef = useRef<HTMLInputElement>(null);
-  // let locationRef = useRef<HTMLInputElement>(null);
-  // let passwordRef = useRef<HTMLInputElement>(null);
 
   const setNameHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -22,7 +19,7 @@ const RegistrationForm = () => {
     setPassword(e.target.value);
   };
 
-  const registerHandler = (e: any) => {
+  const registerHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     fetch("http://localhost:3001/api/v1/users", {
       method: "POST",

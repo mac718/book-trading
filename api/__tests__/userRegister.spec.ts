@@ -1,13 +1,8 @@
 const Sequelize = require("sequelize");
-import { test } from "../config/config";
 import db from "../models";
 const request = require("supertest");
 import app from "../src/app";
 import { v4 as uuidv4 } from "uuid";
-
-// const sequelize = new Sequelize(test.database, test.username, test.password, {
-//   dialect: test.dialect,
-// });
 
 beforeAll(() => {
   return db.sequelize.sync();

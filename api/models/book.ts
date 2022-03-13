@@ -6,6 +6,7 @@ import { Model } from "sequelize";
 interface BookAttributes {
   id: string;
   title: string;
+  description: string;
   author: string;
 }
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -18,6 +19,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     id!: string;
     title!: string;
     author!: string;
+    description!: string;
     static associate(models: any) {
       // define association here
       Book.belongsTo(models.User, { foreignKey: "UserId" });
@@ -31,7 +33,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
         primaryKey: true,
       },
-      title: DataTypes.STRING,
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      description: DataTypes.STRING,
       author: DataTypes.STRING,
     },
     {

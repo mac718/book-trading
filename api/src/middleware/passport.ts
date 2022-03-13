@@ -9,9 +9,13 @@ const options: StrategyOptions = {
 
 export default new Strategy(options, async (payload, done) => {
   try {
-    const user = db.User.findAll({ where: { id: payload.id } });
+    const user = await db.User.findAll({
+      raw: true,
+      where: { id: payload.id },
+    });
+
     if (user[0]) {
-      return done(null, user);
+      return done(null, user[0]);
     }
     return done(null, false);
   } catch (err) {

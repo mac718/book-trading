@@ -1,17 +1,17 @@
 import { RequestHandler } from "express";
 import db from "../../models";
 
+type User = {
+  id: string;
+  name: string;
+  location: string;
+};
+
 type Book = {
   title: string;
   author?: string;
   UserId: string;
   User: User;
-};
-
-type User = {
-  id: string;
-  name: string;
-  location: string;
 };
 
 export const getBooks: RequestHandler = async (req, res) => {
@@ -40,8 +40,18 @@ export const getBooks: RequestHandler = async (req, res) => {
   res.json(bookObjs);
 };
 
-export const addBook: RequestHandler = (req, res) => {
+export const addBook: RequestHandler = async (req, res) => {
+  const user: User = req.user;
+  console.log("user", user.id);
+
   const { title, author, description } = req.body;
-  db.Book.create({ title, author, description });
-  res.status(201).send();
+
+  const book = await db.Book.create({
+    title,
+    author,
+    description,
+    UserId: user.id,
+  });
+
+  res.status(201).json(book);
 };
