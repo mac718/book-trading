@@ -3,12 +3,14 @@ import db from "../../models";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
+import { StatusCodes } from "http-status-codes";
 require("dotenv").config();
 
 type User = {
   dataValues: {
     id: string;
     name: string;
+    email: string;
     location: string;
     bookCount?: number;
   };
@@ -17,6 +19,7 @@ type User = {
 type DataValues = {
   id: string;
   name: string;
+  email: string;
   location: string;
   bookCount?: number;
 };
@@ -36,21 +39,26 @@ export const createUser: RequestHandler = async (req, res) => {
   console.log("user", user);
 
   if (user.length > 0) {
-    return res.status(400).json({ msg: "This user already exists." });
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ msg: "This user already exists." });
   }
 
   const id = uuidv4();
   const hash = await bcrypt.hash(password, 10);
   const newUser = { id, location, name, email, password: hash };
   await db.User.create(newUser);
-  res.json(newUser);
+  _generateToken(newUser);
+  res.status(StatusCodes.CREATED).json(newUser);
 };
 
 export const signIn: RequestHandler = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ msg: "Must provide email and password." });
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ msg: "Must provide email and password." });
   }
 
   let user = await db.User.findAll({ where: { email } });
@@ -59,18 +67,16 @@ export const signIn: RequestHandler = async (req, res) => {
   console.log("password", user);
 
   if (!user) {
-    return res.status(400).json({ msg: "This user does not exist" });
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ msg: "This user does not exist" });
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
 
   if (isMatch) {
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      process.env.JWT_SECRET as string,
-      { expiresIn: 86400 }
-    );
-    return res.status(200).json({ token });
+    const token = _generateToken(user);
+    return res.status(StatusCodes.OK).json({ token });
   }
 };
 
@@ -92,3 +98,14 @@ export const getUsers: RequestHandler = async (req, res) => {
 
   res.json(usersWithBookCount);
 };
+
+//private
+
+function _generateToken(user: DataValues) {
+  const token = jwt.sign(
+    { id: user.id, email: user.email },
+    process.env.JWT_SECRET as string,
+    { expiresIn: 86400 }
+  );
+  return token;
+}

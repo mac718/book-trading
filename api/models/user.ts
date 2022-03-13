@@ -1,4 +1,5 @@
 "use strict";
+import { userInfo } from "os";
 import { UUIDV4 } from "sequelize";
 import { Model } from "sequelize";
 

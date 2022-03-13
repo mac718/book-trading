@@ -3,7 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 import books from "./routes/books";
 import users from "./routes/users";
-import passportMiddleware from "./middlewares/passport";
+import passportMiddleware from "./middleware/passport";
 import passport from "passport";
 
 const app = express();
