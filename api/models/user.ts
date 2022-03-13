@@ -1,5 +1,4 @@
 "use strict";
-import { userInfo } from "os";
 import { UUIDV4 } from "sequelize";
 import { Model } from "sequelize";
 
@@ -25,6 +24,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     static associate(models: any) {
       // define association here
       User.hasMany(models.Book);
+      User.hasMany(models.Request);
     }
   }
   User.init(

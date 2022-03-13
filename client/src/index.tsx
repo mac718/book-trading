@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Users from "./components/Users";
 import NavBar from "./components/NavBar";
 import RegistrationForm from "./components/RegistrationForm";
+import AddBookForm from "./components/AddBookForm";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -15,6 +16,7 @@ ReactDOM.render(
         <Route path="/" element={<App />} />
         <Route path="/users" element={<Users />} />
         <Route path="/register" element={<RegistrationForm />} />
+        <Route path="/add-book" element={<AddBookForm />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

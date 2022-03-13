@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styles from "./Books.module.css";
 import BooksListItem from "./BooksListItem";
+import Button from "./UI/Button";
 
 type Book = {
   title: string;
@@ -45,6 +47,11 @@ const Books = () => {
         </div>
       </div>
       {allBooks}
+      <div>
+        <Link to="/add-book">
+          <Button>Add Book</Button>
+        </Link>
+      </div>
     </div>
   );
 };
