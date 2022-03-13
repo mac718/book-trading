@@ -52,7 +52,7 @@ export const createUser: RequestHandler = async (req, res) => {
   res.status(StatusCodes.CREATED).json(newUser);
 };
 
-export const signIn: RequestHandler = async (req, res) => {
+export const logIn: RequestHandler = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
