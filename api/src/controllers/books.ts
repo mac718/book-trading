@@ -39,3 +39,9 @@ export const getBooks: RequestHandler = async (req, res) => {
 
   res.json(bookObjs);
 };
+
+export const addBook: RequestHandler = (req, res) => {
+  const { title, author, description } = req.body;
+  db.Book.create({ title, author, description });
+  res.status(201).send();
+};

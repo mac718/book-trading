@@ -10,3 +10,12 @@
   margin: auto;
   margin-top: 10%;
 }
+
+.heading {
+  text-align: center;
+}
+
+.input {
+  height: 2rem;
+  border-radius: 5px;
+}

@@ -12,7 +12,7 @@ type User = {
   };
 };
 
-type DataVlues = {
+type DataValues = {
   id: string;
   name: string;
   location: string;
@@ -34,16 +34,8 @@ export const createUser: RequestHandler = async (req, res) => {
   console.log("user", user);
 
   if (user.length > 0) {
-    return res.status(400).send("nope");
+    return res.status(400).json({ msg: "This user already exists." });
   }
-
-  // try {
-  //   const user = await db.User.findAll({ where: { email: email } });
-  //   // if (user) {
-  //   //   return res.status(400).send("nope");
-  //   // }
-  // } catch {
-  //   // console.log(user);
 
   const id = uuidv4();
   const hash = await bcrypt.hash(password, 10);
@@ -55,7 +47,7 @@ export const createUser: RequestHandler = async (req, res) => {
 export const getUsers: RequestHandler = async (req, res) => {
   const users = await db.User.findAll();
   //Promsise.all for parallel processing of db calls
-  const usersWithBookCount: DataVlues[] = await Promise.all(
+  const usersWithBookCount: DataValues[] = await Promise.all(
     users.map(async (user: User) => {
       let count = await db.Book.count({
         where: {

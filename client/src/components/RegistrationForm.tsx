@@ -44,25 +44,32 @@ const RegistrationForm = () => {
 
   return (
     <form className={styles.form} onSubmit={registerHandler}>
-      <h2>Sign Up!</h2>
+      <h2 className={styles.heading}>Sign Up!</h2>
       <label htmlFor="name">Name</label>
-      <input type="text" id="name" onChange={setNameHandler} value={name} />
+      <input
+        type="text"
+        className={styles.input}
+        id="name"
+        onChange={setNameHandler}
+        value={name}
+      />
       <label htmlFor="location">Location</label>
       <input
         type="text"
+        className={styles.input}
         id="location"
         onChange={setLocationHandler}
         value={location}
       />
       <label htmlFor="password">Password</label>
       <input
-        className={styles["control-flow"]}
         type="password"
+        className={styles.input}
         id="password"
         onChange={setPasswordHandler}
         value={password}
       />
-      <Button>Submit</Button>
+      <Button>Register!</Button>
     </form>
   );
 };
