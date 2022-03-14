@@ -1,6 +1,6 @@
 import "./App.css";
 import Books from "./components/Books";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import RegistrationForm from "./components/RegistrationForm";
 import AddBookForm from "./components/AddBookForm";
@@ -23,6 +23,7 @@ function App() {
             <Route path="/add-book" element={<AddBookForm />} />
           )}
           <Route path="/login" element={<LoginForm />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
     </div>
