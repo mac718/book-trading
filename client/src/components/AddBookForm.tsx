@@ -1,4 +1,5 @@
-import React, { useState, FormEvent, ChangeEvent } from "react";
+import React, { useState, FormEvent, ChangeEvent, useContext } from "react";
+import AuthContext from "../store/auth-context";
 import styles from "./AddBookForm.module.css";
 import Button from "./UI/Button";
 
@@ -6,6 +7,8 @@ const AddBookForm = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [description, setDescription] = useState("");
+
+  const authCtx = useContext(AuthContext);
 
   const setTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -18,12 +21,14 @@ const AddBookForm = () => {
   };
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+    console.log(authCtx);
     e.preventDefault();
     fetch("http://localhost:3001/api/v1/books", {
       method: "POST",
       body: JSON.stringify({ title, author, description }),
       headers: {
-        "Content-type": "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authCtx.token}`,
       },
     }).catch((err) => {
       console.log(err);
@@ -31,7 +36,10 @@ const AddBookForm = () => {
   };
   return (
     <form className={styles.form} onSubmit={submitHandler}>
-      <h1>Add A Book for</h1>
+      <h1>
+        Add A Book{" "}
+        <span className={styles.name}>for {authCtx.currentUser?.email}</span>
+      </h1>
       <div>
         <label htmlFor="title" className={styles.label}>
           Title

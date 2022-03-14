@@ -5,10 +5,15 @@ import Button from "./UI/Button";
 const RegistrationForm = () => {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const setNameHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
+  };
+
+  const setEmailHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
   };
 
   const setLocationHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -25,6 +30,7 @@ const RegistrationForm = () => {
       method: "POST",
       body: JSON.stringify({
         name,
+        email,
         location,
         password,
       }),
@@ -35,6 +41,7 @@ const RegistrationForm = () => {
       console.log(err);
     });
     setName("");
+    setEmail("");
     setLocation("");
     setPassword("");
   };
@@ -49,6 +56,14 @@ const RegistrationForm = () => {
         id="name"
         onChange={setNameHandler}
         value={name}
+      />
+      <label htmlFor="email">Email</label>
+      <input
+        type="email"
+        className={styles.input}
+        id="email"
+        onChange={setEmailHandler}
+        value={email}
       />
       <label htmlFor="location">Location</label>
       <input

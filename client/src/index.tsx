@@ -8,6 +8,7 @@ import NavBar from "./components/NavBar";
 import RegistrationForm from "./components/RegistrationForm";
 import AddBookForm from "./components/AddBookForm";
 import { AuthContextProvider } from "./store/auth-context";
+import LoginForm from "./components/LoginForm";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -19,6 +20,7 @@ ReactDOM.render(
           <Route path="/users" element={<Users />} />
           <Route path="/register" element={<RegistrationForm />} />
           <Route path="/add-book" element={<AddBookForm />} />
+          <Route path="/login" element={<LoginForm />} />
         </Routes>
       </BrowserRouter>
     </AuthContextProvider>

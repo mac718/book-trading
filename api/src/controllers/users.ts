@@ -76,7 +76,7 @@ export const logIn: RequestHandler = async (req, res) => {
 
   if (isMatch) {
     const token = _generateToken(user);
-    return res.status(StatusCodes.OK).json({ token });
+    return res.status(StatusCodes.OK).json({ token, user });
   }
 };
 
