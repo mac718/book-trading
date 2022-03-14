@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import AuthContext from "../store/auth-context";
 import styles from "./Books.module.css";
 import BooksListItem from "./BooksListItem";
 import Button from "./UI/Button";
@@ -12,10 +13,29 @@ type Book = {
   userId: string;
 };
 
-const Books = () => {
+type BooksProps = {
+  all: boolean;
+};
+
+const Books = ({ all }: BooksProps) => {
   const [booksList, setBooksList] = useState<Book[]>([]);
+  let url: string;
+
+  const authCtx = useContext(AuthContext);
+  const currentUserEmail = authCtx.currentUser?.email;
+
+  if (all) {
+    url = "http://localhost:3001/api/v1/books/all";
+  } else {
+    url = `http://localhost:3001/api/v1/books/currentUser`;
+  }
+
   useEffect(() => {
-    fetch("http://localhost:3001/api/v1/books/all")
+    fetch(url, {
+      headers: {
+        Authorization: `Bearer ${authCtx.token}`,
+      },
+    })
       .then((res) => {
         return res.json();
       })

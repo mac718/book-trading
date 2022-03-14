@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import { StatusCodes } from "http-status-codes";
 import db from "../../models";
 
 type User = {
@@ -38,6 +39,14 @@ export const getBooks: RequestHandler = async (req, res) => {
   });
 
   res.json(bookObjs);
+};
+
+export const getCurrentUsersBooks: RequestHandler = async (req, res) => {
+  const user = req.user;
+
+  const books = await db.Book.findAll({ where: { UserId: user.id } });
+
+  res.status(StatusCodes.OK).json(books);
 };
 
 export const addBook: RequestHandler = async (req, res) => {
