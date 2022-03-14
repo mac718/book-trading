@@ -28,6 +28,7 @@ const Users = () => {
   const usersListItems = allUsers.map((user) => {
     return (
       <UsersListItem
+        key={user.id}
         name={user.name}
         location={user.location}
         bookCount={user.bookCount}

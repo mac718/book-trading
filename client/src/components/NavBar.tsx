@@ -1,7 +1,17 @@
 import styles from "./NavBar.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import AuthContext from "../store/auth-context";
 
 const NavBar = () => {
+  const authCtx = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const logOutHnadler = () => {
+    authCtx.logOut();
+    navigate("/", { replace: true });
+  };
+
   return (
     <div className={styles.nav}>
       <div className={styles.left}>
@@ -16,7 +26,16 @@ const NavBar = () => {
           <div className={styles["nav-link"]}>Users</div>
         </Link>
       </div>
-      <div className={styles.right}>Login</div>
+      {!authCtx.isLoggedIn && (
+        <div className={styles.right}>
+          <Link to="/login">Login </Link>
+        </div>
+      )}
+      {authCtx.isLoggedIn && (
+        <div className={styles.right} onClick={logOutHnadler}>
+          Logout
+        </div>
+      )}
     </div>
   );
 };

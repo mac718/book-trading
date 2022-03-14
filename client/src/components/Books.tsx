@@ -68,9 +68,16 @@ const Books = ({ all }: BooksProps) => {
       </div>
       {allBooks}
       <div>
-        <Link to="/add-book">
-          <Button>Add Book</Button>
-        </Link>
+        {authCtx.isLoggedIn && (
+          <Link to="/add-book">
+            <Button>Add Book</Button>
+          </Link>
+        )}
+        {!authCtx.isLoggedIn && (
+          <Link to="/login">
+            <Button>Login to add a Book</Button>
+          </Link>
+        )}
       </div>
     </div>
   );

@@ -1,10 +1,13 @@
 import { ChangeEvent, FormEvent, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AuthContext from "../store/auth-context";
 import styles from "./LoginForm.module.css";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const authCtx = useContext(AuthContext);
 
@@ -31,6 +34,7 @@ const LoginForm = () => {
       .then((json) => {
         console.log(json);
         authCtx.logIn(json.token, json.user);
+        navigate("/", { replace: true });
       })
       .catch((err) => {
         console.log(err);

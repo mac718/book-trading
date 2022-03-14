@@ -19,6 +19,7 @@
   display: flex;
   align-items: center;
   color: gray;
+  cursor: pointer;
 }
 
 .title {
@@ -28,4 +29,8 @@
 
 .nav-link {
   margin-right: 0.75rem;
+}
+
+.nav-link:hover {
+  font-weight: bold;
 }
