@@ -6,6 +6,7 @@ import BooksListItem from "./BooksListItem";
 import Button from "./UI/Button";
 
 type Book = {
+  id: string;
   title: string;
   author?: string;
   user: string;
@@ -19,6 +20,7 @@ type BooksProps = {
 
 const Books = ({ all }: BooksProps) => {
   const [booksList, setBooksList] = useState<Book[]>([]);
+  const [selectedBooks, setSelectedBooks] = useState<string[]>([]);
   let url: string;
 
   const authCtx = useContext(AuthContext);
@@ -48,14 +50,28 @@ const Books = ({ all }: BooksProps) => {
       });
   }, []);
 
+  const onBookSelection = (id: string, action: string) => {
+    if (action === "add") {
+      setSelectedBooks((prev) => [...prev, id]);
+    } else if (action === "remove") {
+      let index = selectedBooks.indexOf(id);
+      let selectedBooksCopy = selectedBooks.slice(0);
+      selectedBooksCopy.splice(index, 1);
+      setSelectedBooks(selectedBooksCopy);
+    }
+  };
+  console.log(selectedBooks);
+
   const allBooks = booksList.map((book, idx) => {
     return (
       <BooksListItem
+        id={book.id}
         key={idx}
         title={book.title}
         author={book.author}
         user={book.user}
         location={book.location}
+        onBookSelection={onBookSelection}
       />
     );
   });

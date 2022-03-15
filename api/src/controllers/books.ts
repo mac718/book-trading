@@ -9,6 +9,7 @@ type User = {
 };
 
 type Book = {
+  id: string;
   title: string;
   author?: string;
   UserId: string;
@@ -30,6 +31,7 @@ export const getBooks: RequestHandler = async (req, res) => {
   const bookObjs = books.map((book) => {
     console.log(book.User);
     return {
+      id: book.id,
       title: book.title,
       author: book.author,
       user: book.User.name,

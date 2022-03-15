@@ -1,0 +1,23 @@
+.profile {
+  width: 40%;
+  margin: auto;
+}
+
+.profile-text {
+  color: gray;
+  font-size: 1rem;
+}
+
+.button {
+  background: white;
+  margin-right: 0.25rem;
+}
+
+.button-div {
+  display: flex;
+  justify-content: center;
+}
+
+.attribute {
+  font-weight: bold;
+}
