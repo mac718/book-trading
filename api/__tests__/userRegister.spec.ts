@@ -3,6 +3,7 @@ import db from "../models";
 const request = require("supertest");
 import app from "../src/app";
 import { v4 as uuidv4 } from "uuid";
+import { createUser } from "../src/controllers/users";
 
 beforeAll(() => {
   return db.sequelize.sync();
@@ -25,10 +26,10 @@ const postUser = (user = validUser) => {
 };
 
 describe("User Registration", () => {
-  it("returns 200 status code when user successfully registers", async () => {
+  it("returns 201 status code when user successfully registers", async () => {
     const response = await postUser();
     console.log("res", response);
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
   });
 
   it("saves user to the database", async () => {
@@ -41,5 +42,12 @@ describe("User Registration", () => {
     await postUser();
     const response = await postUser();
     expect(response.status).toBe(400);
+  });
+
+  it("generates a json web token upon successful creation", async () => {
+    const response = await postUser();
+    const text = JSON.parse(response.text);
+
+    expect(text.token).toBeDefined();
   });
 });

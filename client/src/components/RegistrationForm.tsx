@@ -1,4 +1,5 @@
 import { ChangeEvent, useState, FormEvent, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import AuthContext from "../store/auth-context";
 import styles from "./RegistrationForm.module.css";
 import Button from "./UI/Button";
@@ -8,6 +9,8 @@ const RegistrationForm = () => {
   const [location, setLocation] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const authCtx = useContext(AuthContext);
 
@@ -44,6 +47,7 @@ const RegistrationForm = () => {
       .then((res) => res.json())
       .then((json) => {
         authCtx.logIn(json.token, json.newUser);
+        navigate("/");
       })
       .catch((err) => {
         console.log(err);

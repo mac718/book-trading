@@ -21,7 +21,7 @@ export const getBooks: RequestHandler = async (req, res) => {
     include: [
       {
         association: "User",
-        attributes: ["name"],
+        attributes: ["name", "location"],
         required: true,
       },
     ],
@@ -45,9 +45,29 @@ export const getBooks: RequestHandler = async (req, res) => {
 export const getMultipleBooks: RequestHandler = async (req, res) => {
   const { id } = req.query;
 
-  const books = await db.Book.findAll({ where: { id: id } });
+  const books: Book[] = await db.Book.findAll({
+    where: { id: id },
+    include: [
+      {
+        association: "User",
+        attributes: ["email", "location"],
+        required: true,
+      },
+    ],
+  });
 
-  res.status(StatusCodes.OK).json(books);
+  const bookObjs = books.map((book) => {
+    return {
+      id: book.id,
+      title: book.title,
+      author: book.author,
+      user: book.User.name,
+      location: book.User.location,
+      userId: book.UserId,
+    };
+  });
+
+  res.status(StatusCodes.OK).json(bookObjs);
 };
 
 export const getCurrentUsersBooks: RequestHandler = async (req, res) => {
