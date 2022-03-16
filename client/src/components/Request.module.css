@@ -1,0 +1,12 @@
+.request-container {
+  width: 80%;
+  margin: 3rem auto 0 auto;
+  border: 1px solid gray;
+}
+
+.request {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  width: 100%;
+}

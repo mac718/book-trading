@@ -9,6 +9,7 @@ import LoginForm from "./components/LoginForm";
 import { useContext } from "react";
 import AuthContext from "./store/auth-context";
 import UserProfile from "./components/UserProfile";
+import Request from "./components/Request";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -26,6 +27,9 @@ function App() {
           <Route path="/login" element={<LoginForm />} />
           {authCtx.isLoggedIn && (
             <Route path="/profile" element={<UserProfile />} />
+          )}
+          {authCtx.isLoggedIn && (
+            <Route path="/new-request" element={<Request />} />
           )}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

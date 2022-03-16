@@ -17,7 +17,6 @@ type Book = {
 };
 
 export const getBooks: RequestHandler = async (req, res) => {
-  console.log("in handler");
   const books: Book[] = await db.Book.findAll({
     include: [
       {
@@ -40,7 +39,17 @@ export const getBooks: RequestHandler = async (req, res) => {
     };
   });
 
-  res.json(bookObjs);
+  res.status(StatusCodes.OK).json(bookObjs);
+};
+
+export const getMultipleBooks: RequestHandler = async (req, res) => {
+  console.log("HSKSHDKHSDLJHSD");
+
+  const { id } = req.query;
+
+  const books = await db.Book.findAll({ where: { id: id } });
+
+  res.status(StatusCodes.OK).json(books);
 };
 
 export const getCurrentUsersBooks: RequestHandler = async (req, res) => {

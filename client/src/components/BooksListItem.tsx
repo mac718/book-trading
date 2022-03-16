@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import styles from "./BooksListItem.module.css";
 
-type BooksListItemProps = {
+export type BooksListItemProps = {
   id: string;
   title: string;
   author?: string;

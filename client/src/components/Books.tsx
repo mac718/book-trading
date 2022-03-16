@@ -4,8 +4,9 @@ import AuthContext from "../store/auth-context";
 import styles from "./Books.module.css";
 import BooksListItem from "./BooksListItem";
 import Button from "./UI/Button";
+import Heading from "./UI/Heading";
 
-type Book = {
+export type Book = {
   id: string;
   title: string;
   author?: string;
@@ -77,16 +78,22 @@ const Books = ({ all }: BooksProps) => {
   });
   return (
     <div className={styles.main}>
-      <div className={styles.heading}>
+      {/* <div className={styles.heading}>
         <div>
           Books <span className={styles.subheading}>available for trade</span>
         </div>
-      </div>
+      </div> */}
+      <Heading text="Books" subText="available for trade" />
       {allBooks}
       <div>
         {authCtx.isLoggedIn && (
           <Link to="/add-book">
             <Button>Add Book</Button>
+          </Link>
+        )}
+        {authCtx.isLoggedIn && (
+          <Link to="/new-request" state={{ books: selectedBooks }}>
+            <Button>Create New Request</Button>
           </Link>
         )}
         {!authCtx.isLoggedIn && (
