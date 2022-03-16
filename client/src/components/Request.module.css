@@ -10,3 +10,12 @@
 
   width: 100%;
 }
+
+.requester {
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0.75rem;
+  color: lightsteelblue;
+  cursor: pointer;
+}

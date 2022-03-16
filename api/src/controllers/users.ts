@@ -48,8 +48,8 @@ export const createUser: RequestHandler = async (req, res) => {
   const hash = await bcrypt.hash(password, 10);
   const newUser = { id, location, name, email, password: hash };
   await db.User.create(newUser);
-  _generateToken(newUser);
-  res.status(StatusCodes.CREATED).json(newUser);
+  const token = _generateToken(newUser);
+  res.status(StatusCodes.CREATED).json({ newUser, token });
 };
 
 export const logIn: RequestHandler = async (req, res) => {

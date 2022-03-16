@@ -1,0 +1,21 @@
+.item {
+  display: flex;
+  height: 4rem;
+  width: 80%;
+  border: 0.5px gray solid;
+  padding: 0.5rem;
+  color: orange;
+  margin: auto;
+}
+
+.book-info {
+  margin-left: 3rem;
+}
+
+.book-title {
+  font-size: 1.5rem;
+}
+
+.author {
+  font-size: 1.25rem;
+}

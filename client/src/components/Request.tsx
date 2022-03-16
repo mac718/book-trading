@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useLocation, Link } from "react-router-dom";
 import { Book } from "./Books";
 import styles from "./Request.module.css";
-import BooksListItem from "./BooksListItem";
 import Heading from "./UI/Heading";
+import RequestBoook from "./RequestBook";
+import AuthContext from "../store/auth-context";
+
 interface LocationState {
   books: string[];
 }
@@ -11,6 +13,7 @@ const Request = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const location = useLocation();
   const state = location.state as LocationState;
+  const authCtx = useContext(AuthContext);
 
   const bookIds = state.books;
 
@@ -36,18 +39,17 @@ const Request = () => {
     }
   }, []);
 
-  const bookAvailableForTrade: React.ReactNode[] = [];
+  const requestedBooks: React.ReactNode[] = [];
 
   if (books.length > 0) {
     books.forEach((book) => {
-      bookAvailableForTrade.push(
-        <BooksListItem
+      requestedBooks.push(
+        <RequestBoook
           id={book.id}
           title={book.title}
           author={book.author}
           location={book.location}
           user={book.user}
-          onBookSelection={(id, action) => {}}
         />
       );
     });
@@ -57,7 +59,16 @@ const Request = () => {
     <div className={styles["request-container"]}>
       <Heading text="Create Request" subText="for trade" />
       <div className={styles.request}>
-        <div>{bookAvailableForTrade}</div>
+        <div>
+          <div className={styles.requester}>
+            <Link to="/profile">{authCtx.currentUser?.email}</Link> wants to
+            give:
+          </div>
+        </div>
+        <div>
+          <div>And wants to take:</div>
+          {requestedBooks}
+        </div>
       </div>
     </div>
   );

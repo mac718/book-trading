@@ -1,4 +1,5 @@
-import { ChangeEvent, useState, FormEvent } from "react";
+import { ChangeEvent, useState, FormEvent, useContext } from "react";
+import AuthContext from "../store/auth-context";
 import styles from "./RegistrationForm.module.css";
 import Button from "./UI/Button";
 
@@ -7,6 +8,8 @@ const RegistrationForm = () => {
   const [location, setLocation] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const authCtx = useContext(AuthContext);
 
   const setNameHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -37,9 +40,14 @@ const RegistrationForm = () => {
       headers: {
         "Content-type": "application/json",
       },
-    }).catch((err) => {
-      console.log(err);
-    });
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        authCtx.logIn(json.token, json.newUser);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     setName("");
     setEmail("");
     setLocation("");
