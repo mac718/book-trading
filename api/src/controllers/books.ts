@@ -43,8 +43,6 @@ export const getBooks: RequestHandler = async (req, res) => {
 };
 
 export const getMultipleBooks: RequestHandler = async (req, res) => {
-  console.log("HSKSHDKHSDLJHSD");
-
   const { id } = req.query;
 
   const books = await db.Book.findAll({ where: { id: id } });
