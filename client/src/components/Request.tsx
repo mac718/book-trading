@@ -11,6 +11,7 @@ interface LocationState {
 }
 const Request = () => {
   const [books, setBooks] = useState<Book[]>([]);
+  const [requested, setRequested] = useState<string[]>([]);
   const location = useLocation();
   const state = location.state as LocationState;
   const authCtx = useContext(AuthContext);
@@ -33,11 +34,14 @@ const Request = () => {
       )
         .then((res) => res.json())
         .then((json) => {
+          setRequested(bookIds);
           setBooks(json);
         })
         .catch((err) => console.log(err));
     }
   }, []);
+
+  console.log("requested", requested);
 
   const requestedBooks: React.ReactNode[] = [];
 
@@ -68,6 +72,11 @@ const Request = () => {
         <div>
           <div>And wants to take:</div>
           {requestedBooks}
+          <div className={styles["add-books"]}>
+            <Link to="/" state={{ checkedBooks: requested }}>
+              <button>Edit Books to Take</button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

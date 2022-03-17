@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import AuthContext from "../store/auth-context";
 import styles from "./Books.module.css";
 import BooksListItem from "./BooksListItem";
@@ -19,13 +19,20 @@ type BooksProps = {
   all: boolean;
 };
 
+interface LocationState {
+  checkedBooks: string[];
+}
+
 const Books = ({ all }: BooksProps) => {
+  const location = useLocation();
+  const state = location.state as LocationState;
   const [booksList, setBooksList] = useState<Book[]>([]);
   const [selectedBooks, setSelectedBooks] = useState<string[]>([]);
   let url: string;
 
   const authCtx = useContext(AuthContext);
-  const currentUserEmail = authCtx.currentUser?.email;
+
+  console.log("state", location);
 
   if (all) {
     url = "http://localhost:3001/api/v1/books/all";
@@ -64,6 +71,20 @@ const Books = ({ all }: BooksProps) => {
   console.log(selectedBooks);
 
   const allBooks = booksList.map((book, idx) => {
+    if (state && state.checkedBooks.includes(book.id)) {
+      return (
+        <BooksListItem
+          id={book.id}
+          key={idx}
+          title={book.title}
+          author={book.author}
+          user={book.user}
+          location={book.location}
+          onBookSelection={onBookSelection}
+          checked={true}
+        />
+      );
+    }
     return (
       <BooksListItem
         id={book.id}
@@ -73,16 +94,12 @@ const Books = ({ all }: BooksProps) => {
         user={book.user}
         location={book.location}
         onBookSelection={onBookSelection}
+        checked={false}
       />
     );
   });
   return (
     <div className={styles.main}>
-      {/* <div className={styles.heading}>
-        <div>
-          Books <span className={styles.subheading}>available for trade</span>
-        </div>
-      </div> */}
       <Heading text="Books" subText="available for trade" />
       {allBooks}
       <div>

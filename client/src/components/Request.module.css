@@ -19,3 +19,16 @@
   color: lightsteelblue;
   cursor: pointer;
 }
+
+.add-books {
+  width: 80%;
+  margin: auto;
+}
+
+.add-books button {
+  background-color: white;
+  border-top: none;
+  border-left: 0.5px gray solid;
+  border-right: 0.5px gray solid;
+  border-bottom: 0.5px gray solid;
+}
