@@ -31,6 +31,9 @@ function App() {
           {authCtx.isLoggedIn && (
             <Route path="/new-request" element={<Request />} />
           )}
+          {authCtx.isLoggedIn && (
+            <Route path="/books" element={<Books all={false} />} />
+          )}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>

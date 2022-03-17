@@ -68,10 +68,18 @@ const Request = () => {
             <Link to="/profile">{authCtx.currentUser?.email}</Link> wants to
             give:
           </div>
+          <div className={styles["add-books"]}>
+            <Link to="/books" state={{ checkedBooks: requested }}>
+              <button>Edit Books to Give</button>
+            </Link>
+          </div>
         </div>
         <div>
-          <div>And wants to take:</div>
+          <div>
+            <div>And wants to take:</div>
+          </div>
           {requestedBooks}
+
           <div className={styles["add-books"]}>
             <Link to="/" state={{ checkedBooks: requested }}>
               <button>Edit Books to Take</button>

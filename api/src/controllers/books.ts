@@ -73,6 +73,8 @@ export const getMultipleBooks: RequestHandler = async (req, res) => {
 export const getCurrentUsersBooks: RequestHandler = async (req, res) => {
   const user = req.user;
 
+  console.log("user", user);
+
   const books = await db.Book.findAll({ where: { UserId: user.id } });
 
   res.status(StatusCodes.OK).json(books);
