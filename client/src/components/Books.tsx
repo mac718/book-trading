@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import AuthContext from "../store/auth-context";
 import styles from "./Books.module.css";
@@ -98,6 +98,17 @@ const Books = ({ all }: BooksProps) => {
       />
     );
   });
+
+  let booksState: {
+    requestedBooks?: string[] | null;
+    offeredBooks?: string[] | null;
+  };
+
+  if (url.includes("currentUser")) {
+    booksState = { offeredBooks: selectedBooks };
+  } else {
+    booksState = { requestedBooks: selectedBooks };
+  }
   return (
     <div className={styles.main}>
       <Heading text="Books" subText="available for trade" />
@@ -109,7 +120,7 @@ const Books = ({ all }: BooksProps) => {
           </Link>
         )}
         {authCtx.isLoggedIn && (
-          <Link to="/new-request" state={{ books: selectedBooks }}>
+          <Link to="/new-request" state={booksState}>
             <Button>Create New Request</Button>
           </Link>
         )}

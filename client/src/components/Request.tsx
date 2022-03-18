@@ -7,46 +7,79 @@ import RequestBoook from "./RequestBook";
 import AuthContext from "../store/auth-context";
 
 interface LocationState {
-  books: string[];
+  requestedBooks: string[];
+  offeredBooks: string[];
 }
 const Request = () => {
+  const offeredLocal = localStorage.getItem("offeredBooks")
+    ? JSON.parse(localStorage.getItem("offeredBooks")!)
+    : null;
+  const requestedLocal = localStorage.getItem("offeredBooks")
+    ? JSON.parse(localStorage.getItem("requestedBooks")!)
+    : null;
+
   const [books, setBooks] = useState<Book[]>([]);
+  const [fetchedOfferedBooks, setFetchedOfferedBooks] =
+    useState<Book[]>(offeredLocal);
+  const [fetchedRequestedBooks, setFetchedRequestedBooks] =
+    useState<Book[]>(requestedLocal);
   const [requested, setRequested] = useState<string[]>([]);
+  const [offered, setOffered] = useState<string[]>([]);
   const location = useLocation();
   const state = location.state as LocationState;
   const authCtx = useContext(AuthContext);
 
-  const bookIds = state.books;
+  // const requestedBookIds = state.requestedBooks;
+  // const offeredBookIds = state.offeredBooks;
 
-  console.log("bookIds", bookIds);
+  // const requestedQueryString = requestedBookIds.join("&id=");
+  // const offeredQueryString = offeredBookIds.join("&id=");
 
-  const queryString = bookIds.join("&id=");
+  const requestBookIds = state.requestedBooks;
+  const requestQueryString = requestBookIds
+    ? requestBookIds.join("&id=")
+    : null;
+  const offerBookIds = state.offeredBooks;
+  const offerQueryString = offerBookIds ? offerBookIds.join("&id=") : null;
 
   useEffect(() => {
-    if (bookIds.length > 0) {
-      fetch(
-        `http://localhost:3001/api/v1/books/get-multiple?id=${queryString}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((json) => {
-          setRequested(bookIds);
-          setBooks(json);
-        })
-        .catch((err) => console.log(err));
-    }
+    const getBooksForRequest = async () => {
+      if (state.offeredBooks) {
+        fetch(
+          `http://localhost:3001/api/v1/books/get-multiple?id=${offerQueryString}`
+        )
+          .then((res) => res.json())
+          .then((json) => {
+            setOffered(offerBookIds);
+            setFetchedOfferedBooks(json);
+            localStorage.setItem("offeredBooks", JSON.stringify(json));
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        fetch(
+          `http://localhost:3001/api/v1/books/get-multiple?id=${requestQueryString}`
+        )
+          .then((res) => res.json())
+          .then((json) => {
+            setRequested(requestBookIds);
+            setFetchedRequestedBooks(json);
+            localStorage.setItem("requestedBooks", JSON.stringify(json));
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    };
+    getBooksForRequest();
   }, []);
 
-  console.log("requested", requested);
-
   const requestedBooks: React.ReactNode[] = [];
+  const offeredBooks: React.ReactNode[] = [];
 
-  if (books.length > 0) {
-    books.forEach((book) => {
+  if (fetchedRequestedBooks) {
+    fetchedRequestedBooks.forEach((book) => {
       requestedBooks.push(
         <RequestBoook
           id={book.id}
@@ -59,6 +92,22 @@ const Request = () => {
     });
   }
 
+  if (fetchedOfferedBooks) {
+    fetchedOfferedBooks.forEach((book) => {
+      offeredBooks.push(
+        <RequestBoook
+          id={book.id}
+          title={book.title}
+          author={book.author}
+          location={book.location}
+          user={book.user}
+        />
+      );
+    });
+  }
+
+  console.log("offered", offeredBooks);
+  console.log("reqested", requestedBooks);
   return (
     <div className={styles["request-container"]}>
       <Heading text="Create Request" subText="for trade" />
@@ -69,7 +118,8 @@ const Request = () => {
             give:
           </div>
           <div className={styles["add-books"]}>
-            <Link to="/books" state={{ checkedBooks: requested }}>
+            {offeredBooks}
+            <Link to="/books" state={{ checkedBooks: offered }}>
               <button>Edit Books to Give</button>
             </Link>
           </div>
