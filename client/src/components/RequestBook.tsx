@@ -6,6 +6,7 @@ type RequestBookProps = {
   author?: string;
   user: string;
   location?: string;
+  color: string;
 };
 
 const RequestBook = ({
@@ -14,9 +15,10 @@ const RequestBook = ({
   author,
   user,
   location,
+  color,
 }: RequestBookProps) => {
   return (
-    <div className={styles.item}>
+    <div className={`${styles.item} ${styles[`${color}`]}`}>
       <div className={styles["book-info"]}>
         <div className={styles["book-title"]}>{title}</div>
         <div className={styles.author}>by {author}</div>

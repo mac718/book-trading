@@ -4,9 +4,16 @@
   width: 80%;
   border: 0.5px gray solid;
   padding: 0.5rem;
-  color: orange;
   margin: auto;
   box-sizing: border-box;
+}
+
+.orange {
+  color: orange;
+}
+
+.green {
+  color: green;
 }
 
 .book-info {

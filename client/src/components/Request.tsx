@@ -3,7 +3,7 @@ import { useLocation, Link } from "react-router-dom";
 import { Book } from "./Books";
 import styles from "./Request.module.css";
 import Heading from "./UI/Heading";
-import RequestBoook from "./RequestBook";
+import RequestBook from "./RequestBook";
 import AuthContext from "../store/auth-context";
 
 interface LocationState {
@@ -35,6 +35,8 @@ const Request = () => {
   // const requestedQueryString = requestedBookIds.join("&id=");
   // const offeredQueryString = offeredBookIds.join("&id=");
 
+  console.log("snarf", state);
+
   const requestBookIds = state.requestedBooks;
   const requestQueryString = requestBookIds
     ? requestBookIds.join("&id=")
@@ -44,7 +46,7 @@ const Request = () => {
 
   useEffect(() => {
     const getBooksForRequest = async () => {
-      if (state.offeredBooks) {
+      if (state.offeredBooks && state.offeredBooks.length > 0) {
         fetch(
           `http://localhost:3001/api/v1/books/get-multiple?id=${offerQueryString}`
         )
@@ -57,7 +59,7 @@ const Request = () => {
           .catch((err) => {
             console.log(err);
           });
-      } else {
+      } else if (state.requestedBooks && state.requestedBooks.length > 0) {
         fetch(
           `http://localhost:3001/api/v1/books/get-multiple?id=${requestQueryString}`
         )
@@ -73,7 +75,7 @@ const Request = () => {
       }
     };
     getBooksForRequest();
-  }, []);
+  }, [requestBookIds, offerBookIds]);
 
   const requestedBooks: React.ReactNode[] = [];
   const offeredBooks: React.ReactNode[] = [];
@@ -81,12 +83,13 @@ const Request = () => {
   if (fetchedRequestedBooks) {
     fetchedRequestedBooks.forEach((book) => {
       requestedBooks.push(
-        <RequestBoook
+        <RequestBook
           id={book.id}
           title={book.title}
           author={book.author}
           location={book.location}
           user={book.user}
+          color="green"
         />
       );
     });
@@ -95,12 +98,13 @@ const Request = () => {
   if (fetchedOfferedBooks) {
     fetchedOfferedBooks.forEach((book) => {
       offeredBooks.push(
-        <RequestBoook
+        <RequestBook
           id={book.id}
           title={book.title}
           author={book.author}
           location={book.location}
           user={book.user}
+          color="orange"
         />
       );
     });

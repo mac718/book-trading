@@ -9,6 +9,8 @@ const NavBar = () => {
 
   const logOutHnadler = () => {
     authCtx.logOut();
+    localStorage.removeItem("offeredBooks");
+    localStorage.removeItem("requestedBooks");
     navigate("/", { replace: true });
   };
 
