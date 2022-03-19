@@ -8,13 +8,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      requester: {
+      requestestedBooks: {
         type: Sequelize.STRING
       },
-      requestedBook: {
-        type: Sequelize.STRING
-      },
-      proposedTrade: {
+      offeredBooks: {
         type: Sequelize.STRING
       },
       createdAt: {

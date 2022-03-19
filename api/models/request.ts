@@ -1,14 +1,14 @@
 "use strict";
 
 import { UUIDV4 } from "sequelize";
+import { Model } from "sequelize";
 
 interface RequestAttributes {
   id: string;
-  requestedBook: string;
-  proposedTrade: string;
+  requestedBooks: string;
+  offeredBooks: string;
 }
 
-const { Model } = require("sequelize");
 module.exports = (sequelize: any, DataTypes: any) => {
   class Request extends Model<RequestAttributes> implements RequestAttributes {
     /**
@@ -16,30 +16,26 @@ module.exports = (sequelize: any, DataTypes: any) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
+
     id!: string;
-    requestedBook!: string;
-    proposedTrade!: string;
+    requestedBooks!: string;
+    offeredBooks!: string;
+
     static associate(models: any) {
       // define association here
-      Request.belongsTo(models.User, { foreignKey: "requester" });
+      Request.belongsTo(models.User);
     }
   }
   Request.init(
     {
       id: {
         type: DataTypes.UUID,
+        defaultValue: UUIDV4,
         primaryKey: true,
         allowNull: false,
-        defaultValue: UUIDV4,
       },
-      requestedBook: {
-        type: DataTypes.UUID,
-        allowNull: false,
-      },
-      proposedTrade: {
-        type: DataTypes.UUID,
-        allowNull: false,
-      },
+      requestedBooks: { type: DataTypes.STRING, allowNull: false },
+      offeredBooks: { type: DataTypes.STRING, allowNull: false },
     },
     {
       sequelize,

@@ -36,8 +36,6 @@ export const createUser: RequestHandler = async (req, res) => {
 
   const user = await db.User.findAll({ where: { email: email } });
 
-  console.log("user", user);
-
   if (user.length > 0) {
     return res
       .status(StatusCodes.BAD_REQUEST)
