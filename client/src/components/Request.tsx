@@ -1,4 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import React, {
+  MouseEventHandler,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useLocation, Link } from "react-router-dom";
 import { Book } from "./Books";
 import styles from "./Request.module.css";
@@ -110,38 +115,57 @@ const Request = () => {
     });
   }
 
+  const submitRequestHandler = (e: React.MouseEvent) => {
+    e.preventDefault();
+    fetch("http://localhost:3001/api/v1/requsts", {
+      method: "POST",
+      body: JSON.stringify({
+        requestedBooks: requestBookIds,
+        offeredBooks: offerBookIds,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).catch((err) => {
+      console.log(err);
+    });
+  };
+
   console.log("offered", offeredBooks);
   console.log("reqested", requestedBooks);
   return (
-    <div className={styles["request-container"]}>
-      <Heading text="Create Request" subText="for trade" />
-      <div className={styles.request}>
-        <div>
-          <div className={styles.requester}>
-            <Link to="/profile">{authCtx.currentUser?.email}</Link> wants to
-            give:
-          </div>
-          <div className={styles["add-books"]}>
-            {offeredBooks}
-            <Link to="/books" state={{ checkedBooks: offered }}>
-              <button>Edit Books to Give</button>
-            </Link>
-          </div>
-        </div>
-        <div>
+    <>
+      <div className={styles["request-container"]}>
+        <Heading text="Create Request" subText="for trade" />
+        <div className={styles.request}>
           <div>
-            <div>And wants to take:</div>
+            <div className={styles.requester}>
+              <Link to="/profile">{authCtx.currentUser?.email}</Link> wants to
+              give:
+            </div>
+            <div className={styles["add-books"]}>
+              {offeredBooks}
+              <Link to="/books" state={{ checkedBooks: offered }}>
+                <button>Edit Books to Give</button>
+              </Link>
+            </div>
           </div>
-          {requestedBooks}
+          <div>
+            <div>
+              <div>And wants to take:</div>
+            </div>
+            {requestedBooks}
 
-          <div className={styles["add-books"]}>
-            <Link to="/" state={{ checkedBooks: requested }}>
-              <button>Edit Books to Take</button>
-            </Link>
+            <div className={styles["add-books"]}>
+              <Link to="/" state={{ checkedBooks: requested }}>
+                <button>Edit Books to Take</button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <button onClick={submitRequestHandler}>Submit Request</button>
+    </>
   );
 };
 export default Request;

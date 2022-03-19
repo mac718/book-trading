@@ -3,6 +3,7 @@ import db from "../models";
 const request = require("supertest");
 import app from "../src/app";
 import { v4 as uuidv4 } from "uuid";
+import { StatusCodes } from "http-status-codes";
 
 beforeAll(() => {
   return db.sequelize.sync();
@@ -17,6 +18,14 @@ const validUser = {
   name: "user1",
   location: "Portland",
   email: "user1@mail.com",
+  password: "P4assword",
+};
+
+const invalidEmailUser = {
+  id: uuidv4(),
+  name: "user1",
+  location: "Portland",
+  email: "user1",
   password: "P4assword",
 };
 
@@ -48,5 +57,10 @@ describe("User Registration", () => {
     const text = JSON.parse(response.text);
 
     expect(text.token).toBeDefined();
+  });
+
+  it("returns 400 status if email is not correct format", async () => {
+    const response = await postUser(invalidEmailUser);
+    expect(response.status).toBe(StatusCodes.BAD_REQUEST);
   });
 });

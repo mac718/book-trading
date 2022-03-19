@@ -32,8 +32,6 @@ describe("createRequest", () => {
   it("should return 201 status code upon successful creation", async () => {
     const user = await request(app).post("/api/v1/users").send(validUser);
 
-    console.log("wjwdjnojdcn", JSON.parse(user.text));
-
     const res = JSON.parse(user.text);
 
     const response = await request(app)
@@ -43,5 +41,21 @@ describe("createRequest", () => {
       .send(validRequest);
 
     expect(response.status).toBe(201);
+  });
+
+  it("should add a request to the database", async () => {
+    const user = await request(app).post("/api/v1/users").send(validUser);
+
+    const res = JSON.parse(user.text);
+
+    const response = await request(app)
+      .post("/api/v1/requests")
+      .set("Content-Type", "application/json")
+      .set("Authorization", `Bearer ${res.token}`)
+      .send(validRequest);
+
+    const requests = await db.Request.findAll();
+
+    expect(requests.length).toBe(1);
   });
 });

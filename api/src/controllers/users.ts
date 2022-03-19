@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
 import { StatusCodes } from "http-status-codes";
+import { validationResult } from "express-validator";
 require("dotenv").config();
 
 type User = {
@@ -33,6 +34,12 @@ type Book = {
 export const createUser: RequestHandler = async (req, res) => {
   console.log(req.body);
   const { name, location, email, password } = req.body;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(StatusCodes.BAD_REQUEST).json({ msg: errors.array() });
+  }
 
   const user = await db.User.findAll({ where: { email: email } });
 
