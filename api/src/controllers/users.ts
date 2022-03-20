@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
 import { StatusCodes } from "http-status-codes";
 import { validationResult } from "express-validator";
+import { asyncWrapper } from "../middleware/async";
 require("dotenv").config();
 
 type User = {
@@ -32,13 +33,12 @@ type Book = {
 };
 
 export const createUser: RequestHandler = async (req, res) => {
-  console.log(req.body);
   const { name, location, email, password } = req.body;
 
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(StatusCodes.BAD_REQUEST).json({ msg: errors.array() });
+    return res.status(StatusCodes.BAD_REQUEST).json({ errors: errors.array() });
   }
 
   const user = await db.User.findAll({ where: { email: email } });
@@ -57,19 +57,21 @@ export const createUser: RequestHandler = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ newUser, token });
 };
 
-export const logIn: RequestHandler = async (req, res) => {
+export const logIn: RequestHandler = asyncWrapper(async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ msg: "Must provide email and password." });
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(StatusCodes.BAD_REQUEST).json({ errors: errors });
   }
 
-  let user = await db.User.findAll({ where: { email } });
-  user = user[0].dataValues;
+  let user = await db.User.findOne({ where: { email } });
 
-  console.log("password", user);
+  if (!user) {
+    throw new Error();
+  }
+  user = user.dataValues;
 
   if (!user) {
     return res
@@ -83,7 +85,7 @@ export const logIn: RequestHandler = async (req, res) => {
     const token = _generateToken(user);
     return res.status(StatusCodes.OK).json({ token, user });
   }
-};
+});
 
 export const getUsers: RequestHandler = async (req, res) => {
   const users = await db.User.findAll();

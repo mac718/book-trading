@@ -8,7 +8,6 @@ const options: StrategyOptions = {
 };
 
 export default new Strategy(options, async (payload, done) => {
-  console.log("payload", payload);
   try {
     const user = await db.User.findAll({
       raw: true,

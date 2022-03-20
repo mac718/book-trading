@@ -36,7 +36,6 @@ const postUser = (user = validUser) => {
 describe("User Registration", () => {
   it("returns 201 status code when user successfully registers", async () => {
     const response = await postUser();
-    console.log("respernse", response.token);
     expect(response.status).toBe(201);
   });
 

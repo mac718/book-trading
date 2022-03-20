@@ -6,6 +6,7 @@ import users from "./routes/users";
 import requests from "./routes/requests";
 import passportMiddleware from "./middleware/passport";
 import passport from "passport";
+import { errorHandlerMiddleware } from "./middleware/error-handler";
 
 const app = express();
 
@@ -21,6 +22,8 @@ passport.use(passportMiddleware);
 app.use("/api/v1/books", books);
 app.use("/api/v1/users", users);
 app.use("/api/v1/requests", requests);
+
+app.use(errorHandlerMiddleware);
 
 console.log(process.env.NODE_ENV);
 
