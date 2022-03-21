@@ -10,12 +10,19 @@
   width: 100%;
 }
 
-.requester {
+.requester,
+.take-message {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.75rem;
+}
+
+.requester a {
   font-size: 1.25rem;
   font-weight: bold;
-  text-align: center;
   margin-bottom: 0.75rem;
-  color: lightsteelblue;
+  color: blue;
   cursor: pointer;
 }
 
@@ -30,4 +37,8 @@
   border-left: 0.5px gray solid;
   border-right: 0.5px gray solid;
   border-bottom: 0.5px gray solid;
+}
+
+.submit-button {
+  margin: auto;
 }

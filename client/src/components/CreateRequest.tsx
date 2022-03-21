@@ -1,12 +1,7 @@
-import React, {
-  MouseEventHandler,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { useLocation, Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import { Book } from "./Books";
-import styles from "./Request.module.css";
+import styles from "./CreateRequest.module.css";
 import Heading from "./UI/Heading";
 import RequestBook from "./RequestBook";
 import AuthContext from "../store/auth-context";
@@ -15,15 +10,15 @@ interface LocationState {
   requestedBooks: string[];
   offeredBooks: string[];
 }
-const Request = () => {
+
+const CreateRequest = () => {
   const offeredLocal = localStorage.getItem("offeredBooks")
     ? JSON.parse(localStorage.getItem("offeredBooks")!)
     : null;
-  const requestedLocal = localStorage.getItem("offeredBooks")
+  const requestedLocal = localStorage.getItem("requestedBooks")
     ? JSON.parse(localStorage.getItem("requestedBooks")!)
     : null;
 
-  const [books, setBooks] = useState<Book[]>([]);
   const [fetchedOfferedBooks, setFetchedOfferedBooks] =
     useState<Book[]>(offeredLocal);
   const [fetchedRequestedBooks, setFetchedRequestedBooks] =
@@ -34,43 +29,49 @@ const Request = () => {
   const state = location.state as LocationState;
   const authCtx = useContext(AuthContext);
 
-  // const requestedBookIds = state.requestedBooks;
-  // const offeredBookIds = state.offeredBooks;
+  const requestedBookIds =
+    requested.length > 0 ? requested : state.requestedBooks;
 
-  // const requestedQueryString = requestedBookIds.join("&id=");
-  // const offeredQueryString = offeredBookIds.join("&id=");
-
-  console.log("snarf", state);
-
-  const requestBookIds = state.requestedBooks;
-  const requestQueryString = requestBookIds
-    ? requestBookIds.join("&id=")
+  const requestQueryString = requestedBookIds
+    ? requestedBookIds.join("&id=")
     : null;
-  const offerBookIds = state.offeredBooks;
-  const offerQueryString = offerBookIds ? offerBookIds.join("&id=") : null;
+
+  const offeredBookIds = offered.length > 0 ? offered : state.offeredBooks;
+  const offerQueryString = offeredBookIds ? offeredBookIds.join("&id=") : null;
 
   useEffect(() => {
     const getBooksForRequest = async () => {
-      if (state.offeredBooks && state.offeredBooks.length > 0) {
+      // if (state.offeredBooks && state.offeredBooks.length > 0) {
+      if (offeredBookIds && offeredBookIds.length > 0) {
         fetch(
           `http://localhost:3001/api/v1/books/get-multiple?id=${offerQueryString}`
         )
           .then((res) => res.json())
           .then((json) => {
-            setOffered(offerBookIds);
+            setOffered(offeredBookIds);
+            localStorage.setItem(
+              "offeredBookIds",
+              JSON.stringify(offeredBookIds)
+            );
             setFetchedOfferedBooks(json);
             localStorage.setItem("offeredBooks", JSON.stringify(json));
           })
           .catch((err) => {
             console.log(err);
           });
-      } else if (state.requestedBooks && state.requestedBooks.length > 0) {
+        // } else if (state.requestedBooks && state.requestedBooks.length > 0) {
+      } else if (requestedBookIds && requestedBookIds.length > 0) {
         fetch(
           `http://localhost:3001/api/v1/books/get-multiple?id=${requestQueryString}`
         )
           .then((res) => res.json())
           .then((json) => {
-            setRequested(requestBookIds);
+            setRequested(requestedBookIds);
+            localStorage.setItem(
+              "requestedBookIds",
+              JSON.stringify(requestedBookIds)
+            );
+
             setFetchedRequestedBooks(json);
             localStorage.setItem("requestedBooks", JSON.stringify(json));
           })
@@ -80,7 +81,7 @@ const Request = () => {
       }
     };
     getBooksForRequest();
-  }, [requestBookIds, offerBookIds]);
+  }, [requestedBookIds, offeredBookIds]);
 
   const requestedBooks: React.ReactNode[] = [];
   const offeredBooks: React.ReactNode[] = [];
@@ -117,22 +118,30 @@ const Request = () => {
 
   const submitRequestHandler = (e: React.MouseEvent) => {
     e.preventDefault();
-    fetch("http://localhost:3001/api/v1/requsts", {
+    fetch("http://localhost:3001/api/v1/requests", {
       method: "POST",
       body: JSON.stringify({
-        requestedBooks: requestBookIds,
-        offeredBooks: offerBookIds,
+        requestedBooks: localStorage.getItem("requestedBookIds"),
+        offeredBooks: localStorage.getItem("offeredBookIds"),
       }),
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${authCtx.token}`,
       },
-    }).catch((err) => {
-      console.log(err);
-    });
+    })
+      .then(() => {
+        localStorage.removeItem("requestedBooks");
+        localStorage.removeItem("offeredBooks");
+        setRequested([]);
+        setOffered([]);
+        window.history.replaceState({ offeredBooks: [], requestBooks: [] }, "");
+        //navigate("/new-request");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  console.log("offered", offeredBooks);
-  console.log("reqested", requestedBooks);
   return (
     <>
       <div className={styles["request-container"]}>
@@ -152,7 +161,7 @@ const Request = () => {
           </div>
           <div>
             <div>
-              <div>And wants to take:</div>
+              <div className={styles["take-message"]}>And wants to take:</div>
             </div>
             {requestedBooks}
 
@@ -164,8 +173,13 @@ const Request = () => {
           </div>
         </div>
       </div>
-      <button onClick={submitRequestHandler}>Submit Request</button>
+      <button
+        onClick={submitRequestHandler}
+        className={styles["submit-button"]}
+      >
+        Submit Request
+      </button>
     </>
   );
 };
-export default Request;
+export default CreateRequest;

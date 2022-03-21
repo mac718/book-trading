@@ -5,8 +5,14 @@ import { v4 as uuidv4 } from "uuid";
 import { validationResult } from "express-validator";
 
 export const createRequest: RequestHandler = async (req, res) => {
-  const { requestedBooks, offeredBooks } = req.body;
+  let { requestedBooks, offeredBooks } = req.body;
   const user = req.user;
+
+  requestedBooks = JSON.parse(requestedBooks);
+  offeredBooks = JSON.parse(offeredBooks);
+
+  console.log("offered", offeredBooks);
+  console.log("requested", requestedBooks);
 
   const errors = validationResult(req);
 
@@ -21,9 +27,15 @@ export const createRequest: RequestHandler = async (req, res) => {
     id: uuidv4(),
     requestedBooks: requestedBooksString,
     offeredBooks: offeredBooksString,
-    requester: user.id,
+    UserId: user.id,
   };
 
   await db.Request.create(newRequest);
   res.status(StatusCodes.CREATED).send();
+};
+
+export const getAllRequests: RequestHandler = async (req, res) => {
+  const requests = await db.Request.findAll();
+
+  res.status(StatusCodes.OK).json(requests);
 };

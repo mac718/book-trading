@@ -9,7 +9,8 @@ import LoginForm from "./components/LoginForm";
 import { useContext } from "react";
 import AuthContext from "./store/auth-context";
 import UserProfile from "./components/UserProfile";
-import Request from "./components/Request";
+import CreateRequest from "./components/CreateRequest";
+import Requests from "./components/Requests";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -29,11 +30,12 @@ function App() {
             <Route path="/profile" element={<UserProfile />} />
           )}
           {authCtx.isLoggedIn && (
-            <Route path="/new-request" element={<Request />} />
+            <Route path="/new-request" element={<CreateRequest />} />
           )}
           {authCtx.isLoggedIn && (
             <Route path="/books" element={<Books all={false} />} />
           )}
+          <Route path="/requests" element={<Requests />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
