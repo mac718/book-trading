@@ -106,6 +106,14 @@ export const getUsers: RequestHandler = async (req, res) => {
   res.json(usersWithBookCount);
 };
 
+export const getUser: RequestHandler = asyncWrapper(async (req, res) => {
+  const userEmail = req.query.user;
+
+  const user = await db.User.findOne({ where: { email: userEmail } });
+
+  res.status(StatusCodes.OK).json(user);
+});
+
 //private
 
 function _generateToken(user: DataValues) {

@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import styles from "./Users.module.css";
 import UsersListItem from "./UsersListItem";
 
-type User = {
+export type User = {
   id: string;
   name: string;
+  email: string;
   location: string;
   bookCount?: number;
 };
@@ -30,6 +31,7 @@ const Users = () => {
       <UsersListItem
         key={user.id}
         name={user.name}
+        email={user.email}
         location={user.location}
         bookCount={user.bookCount}
       />

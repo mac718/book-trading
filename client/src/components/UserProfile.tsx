@@ -1,38 +1,43 @@
-import { useContext } from "react";
-import AuthContext from "../store/auth-context";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { User } from "../components/Users";
 import styles from "./UserProfile.module.css";
 
 const UserProfile = () => {
-  const authCtx = useContext(AuthContext);
+  const [user, setUser] = useState<User>();
+  const { email } = useParams();
 
-  console.log(authCtx.currentUser);
+  useEffect(() => {
+    fetch(`http://localhost:3001/api/v1/users/user?user=${email}`)
+      .then((res) => res.json())
+      .then((json) => setUser(json))
+      .catch((err) => console.log(err));
+  }, []);
 
-  return (
-    <div className={styles.profile}>
-      <h1>
-        {authCtx.currentUser?.name}'s{" "}
-        <span className={styles["profile-text"]}>profile</span>
-      </h1>
-      <div>
-        <span className={styles.attribute}>Full Name</span>{" "}
-        {authCtx.currentUser?.name}
+  if (user) {
+    return (
+      <div className={styles.profile}>
+        <h1>
+          {user.name}'s <span className={styles["profile-text"]}>profile</span>
+        </h1>
+        <div>
+          <span className={styles.attribute}>Full Name</span> {user.name}
+        </div>
+        <div>
+          <span className={styles.attribute}>Email</span> {user.email}
+        </div>
+        <div>
+          <span className={styles.attribute}>Location</span> {user.location}
+        </div>
+        <div className={styles["button-div"]}>
+          <button className={styles.button}>{user.email}'s Books</button>
+          <button className={styles.button}>Edit Profile</button>
+        </div>
       </div>
-      <div>
-        <span className={styles.attribute}>Email</span>{" "}
-        {authCtx.currentUser?.email}
-      </div>
-      <div>
-        <span className={styles.attribute}>Location</span>{" "}
-        {authCtx.currentUser?.location}
-      </div>
-      <div className={styles["button-div"]}>
-        <button className={styles.button}>
-          {authCtx.currentUser?.email}'s Books
-        </button>
-        <button className={styles.button}>Edit Profile</button>
-      </div>
-    </div>
-  );
+    );
+  } else {
+    return <div>Could not find User Profile</div>;
+  }
 };
 
 export default UserProfile;

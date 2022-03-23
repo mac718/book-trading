@@ -26,9 +26,11 @@ function App() {
             <Route path="/add-book" element={<AddBookForm />} />
           )}
           <Route path="/login" element={<LoginForm />} />
-          {authCtx.isLoggedIn && (
-            <Route path="/profile" element={<UserProfile />} />
-          )}
+
+          <Route path="/profile">
+            <Route path=":email" element={<UserProfile />} />
+          </Route>
+
           {authCtx.isLoggedIn && (
             <Route path="/new-request" element={<CreateRequest />} />
           )}

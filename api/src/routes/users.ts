@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 import { body } from "express-validator";
 
-import { getUsers, createUser, logIn } from "../controllers/users";
+import { getUsers, createUser, logIn, getUser } from "../controllers/users";
 
 router
   .route("/")
@@ -16,5 +16,6 @@ router
   .route("/login")
   .post(body("email").notEmpty(), body("password").notEmpty(), logIn);
 router.route("/all").get(getUsers);
+router.route("/user").get(getUser);
 
 export default router;
