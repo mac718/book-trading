@@ -75,33 +75,19 @@ const Requests = () => {
     return { ...req, offeredBooks: offeredBooks[i] };
   });
 
-  const requstDivs = requestCopy.map((req) => {
+  const requestDivs = requests.map((req, i) => {
     return (
       <RequestsListItem
-        id={req.id}
-        requestedBooks={req.requestedBooks}
-        offeredBooks={req.requestedBooks}
+        requestedBooks={requestCopy[i].requestedBooks}
+        offeredBooks={offerCopy[i].offeredBooks}
       />
     );
   });
 
-  const offerDivs = offerCopy.map((req) => {
-    return (
-      <RequestsListItem
-        id={req.id}
-        requestedBooks={req.offeredBooks}
-        offeredBooks={req.offeredBooks}
-      />
-    );
-  });
-  console.log("requestDivs", requests);
   return (
     <div className={styles["requests-list"]}>
       <Heading text="All Requests" subText="" />
-      <div>
-        {requstDivs}
-        {offerDivs}
-      </div>
+      <div>{requestDivs}</div>
     </div>
   );
 };

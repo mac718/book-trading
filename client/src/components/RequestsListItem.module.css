@@ -4,3 +4,39 @@
   padding: 0.5rem;
   box-sizing: border-box;
 }
+
+.inner-item-box {
+  width: 90%;
+  background-color: lightgray;
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: auto;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.book-box-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 90%;
+  background-color: white;
+}
+
+.book-box {
+  border-bottom: 1px solid gray;
+}
+
+.caption-and-boxes {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.caption {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}

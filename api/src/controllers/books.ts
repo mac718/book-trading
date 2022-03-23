@@ -4,6 +4,7 @@ import db from "../../models";
 
 type User = {
   id: string;
+  email: string;
   name: string;
   location: string;
 };
@@ -62,6 +63,8 @@ export const getMultipleBooks: RequestHandler = async (req, res) => {
       title: book.title,
       author: book.author,
       user: book.User.name,
+      email: book.User.email,
+
       location: book.User.location,
       userId: book.UserId,
     };

@@ -11,6 +11,7 @@ export type Book = {
   title: string;
   author?: string;
   user: string;
+  email: string;
   location?: string;
   userId: string;
 };
