@@ -20,3 +20,8 @@
   background: lightgray;
   font-size: 1.5rem;
 }
+
+.buttons {
+  display: flex;
+  padding: 1rem;
+}

@@ -113,7 +113,7 @@ const Books = ({ all }: BooksProps) => {
     <div className={styles.main}>
       <Heading text="Books" subText="available for trade" />
       {allBooks}
-      <div>
+      <div className={styles.buttons}>
         {authCtx.isLoggedIn && (
           <Link to="/add-book">
             <Button>Add Book</Button>
