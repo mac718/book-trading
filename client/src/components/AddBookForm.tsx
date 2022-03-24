@@ -22,7 +22,6 @@ const AddBookForm = () => {
   };
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
-    console.log(authCtx);
     e.preventDefault();
     fetch("http://localhost:3001/api/v1/books", {
       method: "POST",

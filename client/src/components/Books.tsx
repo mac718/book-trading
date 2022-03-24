@@ -27,11 +27,13 @@ const Books = () => {
   const [selectedBooks, setSelectedBooks] = useState<string[]>([]);
   const { id } = useParams();
 
+  console.log("id", id);
+
   const authCtx = useContext(AuthContext);
 
   let url: string;
 
-  if (location.pathname !== "/add-books") {
+  if (location.pathname === "/add-books" || state) {
     url = `http://localhost:3001/api/v1/books/user?id=${
       authCtx.currentUser!.id
     }`;
@@ -100,7 +102,9 @@ const Books = () => {
     offeredBooks?: string[] | null;
   };
 
-  if (url.includes("currentUser")) {
+  console.log("url", url);
+
+  if (authCtx.currentUser && url.includes(authCtx.currentUser!.id)) {
     booksState = { offeredBooks: selectedBooks };
   } else {
     booksState = { requestedBooks: selectedBooks };
