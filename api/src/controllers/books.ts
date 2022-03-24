@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 import db from "../../models";
+import { asyncWrapper } from "../middleware/async";
 
 type User = {
   id: string;
@@ -82,6 +83,14 @@ export const getCurrentUsersBooks: RequestHandler = async (req, res) => {
 
   res.status(StatusCodes.OK).json(books);
 };
+
+export const getUsersBooks: RequestHandler = asyncWrapper(async (req, res) => {
+  const { id } = req.query;
+
+  const books = await db.Book.findAll({ where: { UserId: id } });
+
+  res.status(StatusCodes.OK).json(books);
+});
 
 export const addBook: RequestHandler = async (req, res) => {
   const user: User = req.user;

@@ -1,5 +1,5 @@
 import { ReactNode, useContext, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import AuthContext from "../store/auth-context";
 import styles from "./Books.module.css";
 import BooksListItem from "./BooksListItem";
@@ -16,37 +16,33 @@ export type Book = {
   userId: string;
 };
 
-type BooksProps = {
-  all: boolean;
-};
-
 interface LocationState {
   checkedBooks: string[];
 }
 
-const Books = ({ all }: BooksProps) => {
+const Books = () => {
   const location = useLocation();
   const state = location.state as LocationState;
   const [booksList, setBooksList] = useState<Book[]>([]);
   const [selectedBooks, setSelectedBooks] = useState<string[]>([]);
-  let url: string;
+  const { id } = useParams();
 
   const authCtx = useContext(AuthContext);
 
-  console.log("state", location);
+  let url: string;
 
-  if (all) {
+  if (location.pathname !== "/add-books") {
+    url = `http://localhost:3001/api/v1/books/user?id=${
+      authCtx.currentUser!.id
+    }`;
+  } else if (!id) {
     url = "http://localhost:3001/api/v1/books/all";
   } else {
-    url = `http://localhost:3001/api/v1/books/currentUser`;
+    url = `http://localhost:3001/api/v1/books/user?id=${id}`;
   }
 
   useEffect(() => {
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${authCtx.token}`,
-      },
-    })
+    fetch(url)
       .then((res) => {
         return res.json();
       })
@@ -69,7 +65,6 @@ const Books = ({ all }: BooksProps) => {
       setSelectedBooks(selectedBooksCopy);
     }
   };
-  console.log(selectedBooks);
 
   const allBooks = booksList.map((book, idx) => {
     if (state && state.checkedBooks.includes(book.id)) {

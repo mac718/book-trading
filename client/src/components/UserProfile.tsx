@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { User } from "../components/Users";
 import styles from "./UserProfile.module.css";
 
@@ -30,7 +30,9 @@ const UserProfile = () => {
           <span className={styles.attribute}>Location</span> {user.location}
         </div>
         <div className={styles["button-div"]}>
-          <button className={styles.button}>{user.email}'s Books</button>
+          <button className={styles.button}>
+            <Link to={`/books/user/${user.id}`}>{user.email}'s Books</Link>
+          </button>
           <button className={styles.button}>Edit Profile</button>
         </div>
       </div>

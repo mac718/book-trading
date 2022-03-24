@@ -19,7 +19,7 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Routes>
-          <Route path="/" element={<Books all={true} />} />
+          <Route path="/" element={<Books />} />
           <Route path="/users" element={<Users />} />
           <Route path="/register" element={<RegistrationForm />} />
           {authCtx.isLoggedIn && (
@@ -34,9 +34,11 @@ function App() {
           {authCtx.isLoggedIn && (
             <Route path="/new-request" element={<CreateRequest />} />
           )}
-          {authCtx.isLoggedIn && (
-            <Route path="/books" element={<Books all={false} />} />
-          )}
+
+          <Route path="/books" element={<Books />} />
+          <Route path="books/user">
+            <Route path=":id" element={<Books />} />
+          </Route>
           <Route path="/requests" element={<Requests />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

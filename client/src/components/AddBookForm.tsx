@@ -79,7 +79,7 @@ const AddBookForm = () => {
         </div>
         <Button>Add Book</Button>
       </form>
-      <Books all={false} />
+      <Books />
     </>
   );
 };
