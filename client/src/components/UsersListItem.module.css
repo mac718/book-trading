@@ -6,12 +6,23 @@
   font-weight: bold;
 }
 
-.book-count {
+.book-count,
+.request-count {
   height: 1rem;
   border-radius: 2px;
-  background-color: blueviolet;
+
   color: white;
   font-size: 11px;
   width: fit-content;
   padding: 2px;
+  display: inline-block;
+  margin: 0.5rem;
+}
+
+.book-count {
+  background-color: blueviolet;
+}
+
+.request-count {
+  background-color: green;
 }

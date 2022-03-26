@@ -3,6 +3,7 @@ import db from "../../models";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
+const { Op } = require("sequelize");
 import { StatusCodes } from "http-status-codes";
 import { validationResult } from "express-validator";
 import { asyncWrapper } from "../middleware/async";
@@ -15,6 +16,7 @@ type User = {
     email: string;
     location: string;
     bookCount?: number;
+    incomingRequests?: number;
   };
 };
 
@@ -24,6 +26,7 @@ type DataValues = {
   email: string;
   location: string;
   bookCount?: number;
+  incomingRequests?: number;
 };
 
 type Book = {
@@ -87,23 +90,48 @@ export const logIn: RequestHandler = asyncWrapper(async (req, res) => {
   }
 });
 
-export const getUsers: RequestHandler = async (req, res) => {
+export const getAllUsers: RequestHandler = async (req, res) => {
   const users = await db.User.findAll();
   //Promsise.all for parallel processing of db calls
-  const usersWithBookCount: DataValues[] = await Promise.all(
+  const usersWithBookAndRequestCount: DataValues[] = await Promise.all(
     users.map(async (user: User) => {
-      let count = await db.Book.count({
+      let bookCount = await db.Book.count({
         where: {
           UserId: user.dataValues.id,
         },
       });
 
-      user.dataValues = { ...user.dataValues, bookCount: count };
+      let books = await await db.Book.findAll({
+        where: {
+          UserId: user.dataValues.id,
+        },
+        raw: true,
+      });
+
+      const allRequestedBooks = await db.Request.findAll({
+        attributes: ["requestedBooks"],
+        raw: true,
+      });
+
+      let reqCount = 0;
+
+      const bookIds = allRequestedBooks.map((r: any) => r.requestedBooks);
+
+      books.forEach((book: any) => {
+        let count = bookIds.filter((id: any) => id === book.id).length;
+        reqCount += count;
+      });
+
+      user.dataValues = {
+        ...user.dataValues,
+        bookCount: bookCount,
+        incomingRequests: reqCount,
+      };
       return user.dataValues;
     })
   );
 
-  res.json(usersWithBookCount);
+  res.json(usersWithBookAndRequestCount);
 };
 
 export const getUser: RequestHandler = asyncWrapper(async (req, res) => {

@@ -22,7 +22,6 @@ const NavBar = () => {
           <div className={styles["nav-link"]}>Books</div>
         </Link>
         <Link to="/requests">
-          {" "}
           <div className={styles["nav-link"]}>Requests</div>
         </Link>
         <div className={styles["nav-link"]}>Trades</div>

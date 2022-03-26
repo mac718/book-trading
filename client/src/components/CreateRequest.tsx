@@ -29,6 +29,8 @@ const CreateRequest = () => {
   const state = location.state as LocationState;
   const authCtx = useContext(AuthContext);
 
+  const navigate = useNavigate();
+
   const requestedBookIds =
     requested.length > 0 ? requested : state.requestedBooks;
 
@@ -41,7 +43,6 @@ const CreateRequest = () => {
 
   useEffect(() => {
     const getBooksForRequest = async () => {
-      // if (state.offeredBooks && state.offeredBooks.length > 0) {
       if (offeredBookIds && offeredBookIds.length > 0) {
         fetch(
           `http://localhost:3001/api/v1/books/get-multiple?id=${offerQueryString}`
@@ -59,7 +60,6 @@ const CreateRequest = () => {
           .catch((err) => {
             console.log(err);
           });
-        // } else if (state.requestedBooks && state.requestedBooks.length > 0) {
       } else if (requestedBookIds && requestedBookIds.length > 0) {
         fetch(
           `http://localhost:3001/api/v1/books/get-multiple?id=${requestQueryString}`
@@ -135,7 +135,8 @@ const CreateRequest = () => {
         setRequested([]);
         setOffered([]);
         window.history.replaceState({ offeredBooks: [], requestBooks: [] }, "");
-        //navigate("/new-request");
+
+        navigate("/requests");
       })
       .catch((err) => {
         console.log(err);

@@ -8,6 +8,7 @@ export type User = {
   email: string;
   location: string;
   bookCount?: number;
+  incomingRequests?: number;
 };
 
 const Users = () => {
@@ -34,6 +35,7 @@ const Users = () => {
         email={user.email}
         location={user.location}
         bookCount={user.bookCount}
+        reqCount={user.incomingRequests}
       />
     );
   });
