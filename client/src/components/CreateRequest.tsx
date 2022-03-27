@@ -121,8 +121,8 @@ const CreateRequest = () => {
     fetch("http://localhost:3001/api/v1/requests", {
       method: "POST",
       body: JSON.stringify({
-        requestedBooks: localStorage.getItem("requestedBookIds"),
-        offeredBooks: localStorage.getItem("offeredBookIds"),
+        requestedBooks: JSON.parse(localStorage.getItem("requestedBookIds")!),
+        offeredBooks: JSON.parse(localStorage.getItem("offeredBookIds")!),
       }),
       headers: {
         "Content-Type": "application/json",

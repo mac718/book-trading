@@ -8,8 +8,8 @@ router
   .route("/")
   .post(
     body("email").isEmail(),
-    body("email").notEmpty(),
-    body("password").notEmpty(),
+    body("email").notEmpty().withMessage("Must enter email."),
+    body("password").notEmpty().withMessage("Must enter password."),
     createUser
   );
 router

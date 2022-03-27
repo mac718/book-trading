@@ -21,6 +21,6 @@ describe("user login", () => {
 
     res = JSON.parse(res.text);
 
-    expect(res.msg).toBe("Something went wrong. Please try again.");
+    expect(res.msg).toBe("This user does not exist.");
   });
 });

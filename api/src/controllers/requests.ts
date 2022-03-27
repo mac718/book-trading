@@ -8,11 +8,20 @@ export const createRequest: RequestHandler = async (req, res) => {
   let { requestedBooks, offeredBooks } = req.body;
   const user = req.user;
 
-  requestedBooks = JSON.parse(requestedBooks);
-  offeredBooks = JSON.parse(offeredBooks);
+  console.log("requestedBooks", requestedBooks);
 
-  console.log("offered", offeredBooks);
-  console.log("requested", requestedBooks);
+  if (requestedBooks) {
+    requestedBooks = JSON.parse(requestedBooks);
+  }
+
+  if (offeredBooks) {
+    offeredBooks = JSON.parse(offeredBooks);
+  }
+
+  //offeredBooks = JSON.parse(offeredBooks);
+
+  // console.log("offered", offeredBooks);
+  // console.log("requested", requestedBooks);
 
   const errors = validationResult(req);
 

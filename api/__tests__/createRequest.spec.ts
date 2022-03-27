@@ -16,15 +16,15 @@ beforeEach(async () => {
 
 const validRequest = {
   id: uuidv4(),
-  requestedBooks: [1, 2, 3, 4],
-  offeredBooks: [5, 6, 7, 8],
+  requestedBooks: JSON.stringify([1, 2, 3, 4]),
+  offeredBooks: JSON.stringify([5, 6, 7, 8]),
   requester: uuidv4(),
 };
 
 const invalidRequestMissingRequestedBooks = {
   id: uuidv4(),
   requestedBooks: null,
-  offeredBooks: [5, 6, 7, 8],
+  offeredBooks: JSON.stringify([5, 6, 7, 8]),
   requester: uuidv4(),
 };
 

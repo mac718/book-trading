@@ -10,7 +10,7 @@ type User = {
 
 type AuthContextProps = {
   token: string | null;
-  currentUser: User | null;
+  currentUser: User | null | undefined;
   isLoggedIn: boolean;
   logIn: (token: string, user: User) => void;
   logOut: () => void;
@@ -28,7 +28,7 @@ export const AuthContextProvider: FC = ({ children }) => {
   const initialToken = localStorage.getItem("token");
   const initialCurrentUser = localStorage.getItem("currentUser");
   const [token, setToken] = useState<string | null>(initialToken);
-  const [currentUser, setCurrentUser] = useState<User | null>(
+  const [currentUser, setCurrentUser] = useState<User | null | undefined>(
     JSON.parse(initialCurrentUser as string)
   );
 

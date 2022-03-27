@@ -116,17 +116,17 @@ const Books = () => {
       <div className={styles.buttons}>
         {authCtx.isLoggedIn && (
           <Link to="/add-book">
-            <Button>Add Book</Button>
+            <button className={styles.button}>Add Book</button>
           </Link>
         )}
         {authCtx.isLoggedIn && (
           <Link to="/new-request" state={booksState}>
-            <Button>Create New Request</Button>
+            <button className={styles.button}>Create New Request</button>
           </Link>
         )}
         {!authCtx.isLoggedIn && (
           <Link to="/login">
-            <Button>Login to add a Book</Button>
+            <button className={styles.button}>Login to add a Book</button>
           </Link>
         )}
       </div>

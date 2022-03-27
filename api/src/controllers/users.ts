@@ -7,6 +7,7 @@ const { Op } = require("sequelize");
 import { StatusCodes } from "http-status-codes";
 import { validationResult } from "express-validator";
 import { asyncWrapper } from "../middleware/async";
+import { BadRequestError } from "../errors/bad-request";
 require("dotenv").config();
 
 type User = {
@@ -35,21 +36,36 @@ type Book = {
   UserId: string;
 };
 
-export const createUser: RequestHandler = async (req, res) => {
+type Request = {
+  id: string;
+  requestedBooks: string;
+  offeredBooks: string;
+};
+
+export const createUser: RequestHandler = asyncWrapper(async (req, res) => {
   const { name, location, email, password } = req.body;
 
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(StatusCodes.BAD_REQUEST).json({ errors: errors.array() });
+    type ValidationErrors = {
+      [key: string]: string;
+    };
+    const validationErrors: ValidationErrors = {};
+    errors.array().forEach((err) => {
+      validationErrors[err.param] = err.msg;
+    });
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ errors: validationErrors });
   }
 
   const user = await db.User.findAll({ where: { email: email } });
 
+  console.log("smurf", user);
+
   if (user.length > 0) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ msg: "This user already exists." });
+    throw new BadRequestError("This user already exists.");
   }
 
   const id = uuidv4();
@@ -58,7 +74,7 @@ export const createUser: RequestHandler = async (req, res) => {
   await db.User.create(newUser);
   const token = _generateToken(newUser);
   res.status(StatusCodes.CREATED).json({ newUser, token });
-};
+});
 
 export const logIn: RequestHandler = asyncWrapper(async (req, res) => {
   const { email, password } = req.body;
@@ -72,9 +88,11 @@ export const logIn: RequestHandler = asyncWrapper(async (req, res) => {
   let user = await db.User.findOne({ where: { email } });
 
   if (!user) {
-    throw new Error();
+    throw new BadRequestError("This user does not exist.");
   }
   user = user.dataValues;
+
+  console.log("user", user);
 
   if (!user) {
     return res
@@ -115,10 +133,10 @@ export const getAllUsers: RequestHandler = async (req, res) => {
 
       let reqCount = 0;
 
-      const bookIds = allRequestedBooks.map((r: any) => r.requestedBooks);
+      const bookIds = allRequestedBooks.map((r: Request) => r.requestedBooks);
 
       books.forEach((book: any) => {
-        let count = bookIds.filter((id: any) => id === book.id).length;
+        let count = bookIds.filter((id: string) => id === book.id).length;
         reqCount += count;
       });
 

@@ -39,7 +39,7 @@ const AddBookForm = () => {
       <form className={styles.form} onSubmit={submitHandler}>
         <h1>
           Add A Book{" "}
-          <span className={styles.name}>for {authCtx.currentUser?.name}</span>
+          <span className={styles.name}>for {authCtx.currentUser?.email}</span>
         </h1>
         <div>
           <label htmlFor="title" className={styles.label}>
