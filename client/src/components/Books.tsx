@@ -3,7 +3,6 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import AuthContext from "../store/auth-context";
 import styles from "./Books.module.css";
 import BooksListItem from "./BooksListItem";
-import Button from "./UI/Button";
 import Heading from "./UI/Heading";
 
 export type Book = {
@@ -18,6 +17,7 @@ export type Book = {
 
 interface LocationState {
   checkedBooks: string[];
+  take?: boolean;
 }
 
 const Books = () => {
@@ -27,13 +27,11 @@ const Books = () => {
   const [selectedBooks, setSelectedBooks] = useState<string[]>([]);
   const { id } = useParams();
 
-  console.log("id", id);
-
   const authCtx = useContext(AuthContext);
 
   let url: string;
 
-  if (location.pathname === "/add-books" || state) {
+  if (location.pathname === "/add-books" || (state && !state.take)) {
     url = `http://localhost:3001/api/v1/books/user?id=${
       authCtx.currentUser!.id
     }`;
@@ -102,8 +100,6 @@ const Books = () => {
     offeredBooks?: string[] | null;
   };
 
-  console.log("url", url);
-
   if (authCtx.currentUser && url.includes(authCtx.currentUser!.id)) {
     booksState = { offeredBooks: selectedBooks };
   } else {
@@ -124,6 +120,11 @@ const Books = () => {
             <button className={styles.button}>Create New Request</button>
           </Link>
         )}
+        {/* {authCtx.isLoggedIn && location.state && (
+          <Link to="/new-request" state={booksState}>
+            <button className={styles.button}>Continue</button>
+          </Link>
+        )} */}
         {!authCtx.isLoggedIn && (
           <Link to="/login">
             <button className={styles.button}>Login to add a Book</button>

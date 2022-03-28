@@ -62,8 +62,6 @@ export const createUser: RequestHandler = asyncWrapper(async (req, res) => {
 
   const user = await db.User.findAll({ where: { email: email } });
 
-  console.log("smurf", user);
-
   if (user.length > 0) {
     throw new BadRequestError("This user already exists.");
   }
@@ -108,7 +106,7 @@ export const logIn: RequestHandler = asyncWrapper(async (req, res) => {
   }
 });
 
-export const getAllUsers: RequestHandler = async (req, res) => {
+export const getAllUsers: RequestHandler = asyncWrapper(async (req, res) => {
   const users = await db.User.findAll();
   //Promsise.all for parallel processing of db calls
   const usersWithBookAndRequestCount: DataValues[] = await Promise.all(
@@ -150,7 +148,7 @@ export const getAllUsers: RequestHandler = async (req, res) => {
   );
 
   res.json(usersWithBookAndRequestCount);
-};
+});
 
 export const getUser: RequestHandler = asyncWrapper(async (req, res) => {
   const userEmail = req.query.user;

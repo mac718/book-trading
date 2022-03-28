@@ -167,7 +167,7 @@ const CreateRequest = () => {
             {requestedBooks}
 
             <div className={styles["add-books"]}>
-              <Link to="/" state={{ checkedBooks: requested }}>
+              <Link to="/" state={{ checkedBooks: requested, take: true }}>
                 <button>Edit Books to Take</button>
               </Link>
             </div>
