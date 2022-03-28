@@ -1,4 +1,5 @@
 import React, { useState, FormEvent, ChangeEvent, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import AuthContext from "../store/auth-context";
 import styles from "./AddBookForm.module.css";
 import Books from "./Books";
@@ -8,6 +9,8 @@ const AddBookForm = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [description, setDescription] = useState("");
+
+  const navigate = useNavigate();
 
   const authCtx = useContext(AuthContext);
 
@@ -30,9 +33,13 @@ const AddBookForm = () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authCtx.token}`,
       },
-    }).catch((err) => {
-      console.log(err);
-    });
+    })
+      .then(() => {
+        navigate("/books");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <>

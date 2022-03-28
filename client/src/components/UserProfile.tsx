@@ -33,7 +33,9 @@ const UserProfile = () => {
           <button className={styles.button}>
             <Link to={`/books/user/${user.id}`}>{user.email}'s Books</Link>
           </button>
-          <button className={styles.button}>Edit Profile</button>
+          <button className={styles.button}>
+            <Link to="/edit-profile">Edit Profile</Link>
+          </button>
         </div>
       </div>
     );
