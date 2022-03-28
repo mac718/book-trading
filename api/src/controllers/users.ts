@@ -158,6 +158,17 @@ export const getUser: RequestHandler = asyncWrapper(async (req, res) => {
   res.status(StatusCodes.OK).json(user);
 });
 
+export const updateUser: RequestHandler = asyncWrapper(async (req, res) => {
+  const { name, email, location } = req.body;
+
+  const user = db.User.update(
+    { name, email, location },
+    { where: { id: req.user.id } }
+  );
+
+  res.status(StatusCodes.OK).send();
+});
+
 //private
 
 function _generateToken(user: DataValues) {

@@ -110,21 +110,21 @@ const Books = () => {
       <Heading text="Books" subText="available for trade" />
       {allBooks}
       <div className={styles.buttons}>
-        {authCtx.isLoggedIn && (
+        {authCtx.isLoggedIn && !location.state && (
           <Link to="/add-book">
             <button className={styles.button}>Add Book</button>
           </Link>
         )}
-        {authCtx.isLoggedIn && (
+        {authCtx.isLoggedIn && !location.state && (
           <Link to="/new-request" state={booksState}>
             <button className={styles.button}>Create New Request</button>
           </Link>
         )}
-        {/* {authCtx.isLoggedIn && location.state && (
+        {authCtx.isLoggedIn && location.state && (
           <Link to="/new-request" state={booksState}>
             <button className={styles.button}>Continue</button>
           </Link>
-        )} */}
+        )}
         {!authCtx.isLoggedIn && (
           <Link to="/login">
             <button className={styles.button}>Login to add a Book</button>

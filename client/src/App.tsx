@@ -11,6 +11,7 @@ import AuthContext from "./store/auth-context";
 import UserProfile from "./components/UserProfile";
 import CreateRequest from "./components/CreateRequest";
 import Requests from "./components/Requests";
+import UserProfileForm from "./components/UserProfileForm";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -40,6 +41,9 @@ function App() {
             <Route path=":id" element={<Books />} />
           </Route>
           <Route path="/requests" element={<Requests />} />
+          {authCtx.isLoggedIn && (
+            <Route path="/edit-profile" element={<UserProfileForm />} />
+          )}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
